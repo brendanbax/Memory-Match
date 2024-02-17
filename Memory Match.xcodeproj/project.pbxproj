@@ -14,6 +14,7 @@
 		C61296A12B7F17570081C56D /* Memory_MatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61296A02B7F17570081C56D /* Memory_MatchTests.swift */; };
 		C61296AB2B7F17570081C56D /* Memory_MatchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61296AA2B7F17570081C56D /* Memory_MatchUITests.swift */; };
 		C61296AD2B7F17570081C56D /* Memory_MatchUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61296AC2B7F17570081C56D /* Memory_MatchUITestsLaunchTests.swift */; };
+		C61296BA2B7F17850081C56D /* Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61296B92B7F17850081C56D /* Logic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,7 @@
 		C61296A62B7F17570081C56D /* Memory MatchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Memory MatchUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C61296AA2B7F17570081C56D /* Memory_MatchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memory_MatchUITests.swift; sourceTree = "<group>"; };
 		C61296AC2B7F17570081C56D /* Memory_MatchUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memory_MatchUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		C61296B92B7F17850081C56D /* Logic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 				C61296922B7F17560081C56D /* Assets.xcassets */,
 				C61296942B7F17560081C56D /* Memory_Match.entitlements */,
 				C61296952B7F17560081C56D /* Preview Content */,
+				C61296B92B7F17850081C56D /* Logic.swift */,
 			);
 			path = "Memory Match";
 			sourceTree = "<group>";
@@ -260,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C61296912B7F17550081C56D /* ContentView.swift in Sources */,
+				C61296BA2B7F17850081C56D /* Logic.swift in Sources */,
 				C612968F2B7F17550081C56D /* Memory_MatchApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
