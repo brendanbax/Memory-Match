@@ -6,13 +6,45 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ThemePickerView: View {
+    @Binding var selectedTheme: GameThemeOptions
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Menu {
+                Button(action: {
+                    selectedTheme = .defaultTheme
+                }) {
+                    Label("Default", systemImage: "paintbrush")
+                }
+                Button(action: {
+                    selectedTheme = .animals
+                }) {
+                    Label("Animals", systemImage: "tortoise.fill")
+                }
+                Button(action: {
+                    selectedTheme = .foods
+                }) {
+                    Label("Foods", systemImage: "leaf.fill")
+                }
+                Button(action: {
+                    selectedTheme = .elements
+                }) {
+                    Label("Elements", systemImage: "flame.fill")
+                }
+            } label: {
+                Label("Select theme: \(selectedTheme.rawValue)", systemImage: "list.dash")
+                    .padding()
+                    .foregroundColor(.blue)
+            }
+        }
     }
 }
 
-#Preview {
-    ThemePickerView()
+struct ThemePickerView_Previews: PreviewProvider {
+    static var previews: some View {
+        ThemePickerView(selectedTheme: .constant(.defaultTheme))
+    }
 }
