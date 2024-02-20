@@ -7,43 +7,57 @@
 
 import SwiftUI
 
-func startGame() {
-    print("Starting game")
-}
-
 struct ContentView: View {
-    let gameThemeOptions = ["default", "animals", "food", "elements"]
     let rows = [GridItem](repeating: GridItem(.fixed(75)), count: 4)
 
-    @State private var selectedTheme: String = ""
-    @State private var sessionDuration: Int = 0
+    @State var selectedTheme: GameThemeOptions = .defaultTheme
+    
     @State private var score: Int = 0
     @State private var activePiece: String = ""
+    @State private var isTimerRunning = false
+    @State private var startTime =  Date()
+    @State private var timerString = "0.00"
+    @State private var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
-    var gameBoard: [GamePiece] {
-        generatePieces(theme: selectedTheme)
+    func stopTimer() {
+            self.timer.upstream.connect().cancel()
+        }
+
+    func startTimer() {
+        self.timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
+    }
+
+    func startGame() {
+        if isTimerRunning {
+            // stop UI updates
+            self.stopTimer()
+        } else {
+            timerString = "0.00"
+            startTime = Date()
+            // start UI updates
+            self.startTimer()
+        }
+        isTimerRunning.toggle()
     }
 
     var body: some View {
         VStack {
             Spacer()
-            Text("Game Clock")
+            Text(timerString)
+                .font(Font.system(.largeTitle, design: .monospaced))
+                .onReceive(timer) { _ in
+                if self.isTimerRunning {
+                    timerString = String(format: "%.2f", (Date().timeIntervalSince( self.startTime)))
+                }
+            }
             Spacer()
             LazyHGrid(rows: rows, spacing: 10, content: {
-                ForEach(gameBoard, id: \.id) { piece in
+                ForEach(selectedTheme.gameBoard, id: \.id) { piece in
                     BoardItem(piece: piece)
                 }
             })
             Spacer()
-            HStack {
-                Text("Theme:")
-                Picker("Select a theme", selection: $selectedTheme) {
-                                ForEach(gameThemeOptions, id: \.self) {
-                                    Text($0)
-                                }
-                            }
-                            .pickerStyle(.menu)
-            }
+            ThemePickerView(selectedTheme: $selectedTheme)
             Spacer()
             Button("Start", systemImage: "play", action: startGame)
             Spacer()
