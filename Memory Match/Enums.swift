@@ -7,6 +7,11 @@
 
 import Foundation
 
+struct GamePiece {
+    let id = UUID()
+    let symbol: String
+}
+
 enum GameThemeOptions: String, CaseIterable {
     case defaultTheme = "Default"
     case animals = "Animals"
