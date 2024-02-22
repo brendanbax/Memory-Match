@@ -8,75 +8,40 @@
 import SwiftUI
 
 struct ContentView: View {
-    let rows = [GridItem](repeating: GridItem(.fixed(75)), count: 4)
-
-    @State var selectedTheme: GameThemeOptions = .defaultTheme
-    
-    @State private var score: Int = 0
+    @State private var score: String = ""
     @State private var activePiece: String = ""
-    @State private var isTimerRunning = false
-    @State private var startTime =  Date()
-    @State private var timerString = "0.00"
-    @State private var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-
-    func stopTimer() {
-            self.timer.upstream.connect().cancel()
-        }
-
-    func startTimer() {
-        self.timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
-    }
+    @State private var isTimerRunning: Bool = false
+    @State private var timerString: String = "0.00"
 
     func startGame() {
-        if isTimerRunning {
-            // stop UI updates
-            self.stopTimer()
-        } else {
-            timerString = "0.00"
-            startTime = Date()
-            // start UI updates
-            self.startTimer()
-        }
-        isTimerRunning.toggle()
+        self.isTimerRunning.toggle()
+    }
+
+    func stopGame() {
+        self.score = self.timerString
+        self.isTimerRunning = false
+        print(self.timerString)
     }
 
     var body: some View {
         VStack {
             Spacer()
-            Text(timerString)
-                .font(Font.system(.largeTitle, design: .monospaced))
-                .onReceive(timer) { _ in
-                if self.isTimerRunning {
-                    timerString = String(format: "%.2f", (Date().timeIntervalSince( self.startTime)))
+            if self.isTimerRunning {
+                TimerView(isTimerRunning: $isTimerRunning, timerString: $timerString)
+            } else if self.score != "" {
+                VStack {
+                    Text("SCORE").font(Font.system(.title))
+                    Text(self.score).font(Font.system(.largeTitle, design: .monospaced))
                 }
             }
             Spacer()
-            LazyHGrid(rows: rows, spacing: 10, content: {
-                ForEach(selectedTheme.gameBoard, id: \.id) { piece in
-                    BoardItem(piece: piece)
-                }
-            })
+            GameBoardView()
             Spacer()
-            ThemePickerView(selectedTheme: $selectedTheme)
+            HStack {
+                Button("Start", systemImage: "play", action: startGame)
+                Button("Stop", systemImage: "stop", action: stopGame)
+            }
             Spacer()
-            Button("Start", systemImage: "play", action: startGame)
-            Spacer()
-        }
-    }
-}
-
-struct BoardItem: View {
-    var piece: GamePiece
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 20)
-                .fill(.white)
-                .stroke(.blue, lineWidth: 3)
-                .aspectRatio(contentMode: .fit)
-            Text(piece.symbol)
-                .font(.largeTitle)
-                .padding()
-                .cornerRadius(/*@START_MENU_TOKEN@*/8.0/*@END_MENU_TOKEN@*/)
         }
     }
 }

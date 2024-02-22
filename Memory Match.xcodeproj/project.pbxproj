@@ -16,6 +16,8 @@
 		C61296AD2B7F17570081C56D /* Memory_MatchUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61296AC2B7F17570081C56D /* Memory_MatchUITestsLaunchTests.swift */; };
 		C61296BE2B844D500081C56D /* ThemePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61296BD2B844D500081C56D /* ThemePickerView.swift */; };
 		C61296C22B84535B0081C56D /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61296C12B84535B0081C56D /* Enums.swift */; };
+		C61296C42B8587CA0081C56D /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61296C32B8587CA0081C56D /* TimerView.swift */; };
+		C69AAE452B86E4EB00E76A29 /* GameBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C69AAE442B86E4EB00E76A29 /* GameBoardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		C61296AC2B7F17570081C56D /* Memory_MatchUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memory_MatchUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		C61296BD2B844D500081C56D /* ThemePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePickerView.swift; sourceTree = "<group>"; };
 		C61296C12B84535B0081C56D /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		C61296C32B8587CA0081C56D /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		C69AAE442B86E4EB00E76A29 /* GameBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBoardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,11 +105,13 @@
 			children = (
 				C612968E2B7F17550081C56D /* Memory_MatchApp.swift */,
 				C61296902B7F17550081C56D /* ContentView.swift */,
+				C69AAE442B86E4EB00E76A29 /* GameBoardView.swift */,
 				C61296922B7F17560081C56D /* Assets.xcassets */,
 				C61296942B7F17560081C56D /* Memory_Match.entitlements */,
 				C61296952B7F17560081C56D /* Preview Content */,
 				C61296BD2B844D500081C56D /* ThemePickerView.swift */,
 				C61296C12B84535B0081C56D /* Enums.swift */,
+				C61296C32B8587CA0081C56D /* TimerView.swift */,
 			);
 			path = "Memory Match";
 			sourceTree = "<group>";
@@ -265,10 +271,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C61296C42B8587CA0081C56D /* TimerView.swift in Sources */,
 				C61296BE2B844D500081C56D /* ThemePickerView.swift in Sources */,
 				C61296912B7F17550081C56D /* ContentView.swift in Sources */,
 				C61296C22B84535B0081C56D /* Enums.swift in Sources */,
 				C612968F2B7F17550081C56D /* Memory_MatchApp.swift in Sources */,
+				C69AAE452B86E4EB00E76A29 /* GameBoardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
