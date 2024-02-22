@@ -22,7 +22,7 @@ struct BoardItem: View {
                 .font(.largeTitle)
                 .padding()
                 .cornerRadius(/*@START_MENU_TOKEN@*/8.0/*@END_MENU_TOKEN@*/)
-                .opacity(self.visible ? 1 : 0)
+                .opacity(visible ? 1 : 0)
         }
     }
 }
@@ -42,7 +42,9 @@ struct GameBoardView: View {
         VStack {
             LazyHGrid(rows: rows, spacing: 10, content: {
                 ForEach(selectedTheme.gameBoard, id: \.id) { piece in
-                    BoardItem(piece: piece, visible: self.selectedPieces.contains(piece.id) || self.matchList.contains(piece.id))
+                    BoardItem(piece: piece, visible:
+                            selectedPieces.contains(piece.id) ||
+                            matchList.contains(piece.id))
                         .onTapGesture {
                             handlePieceTap(id: piece.id)
                                 }
