@@ -10,6 +10,7 @@ import Foundation
 
 struct BoardItem: View {
     let piece: GamePiece
+    
     @Binding var selectedPieces: [GamePiece]
     @Binding var matchList: [GamePiece]
 
@@ -29,12 +30,28 @@ struct BoardItem: View {
 }
 
 struct GameBoardView: View {
+    @EnvironmentObject var gameData: GameData
+    
     let rows = [GridItem](repeating: GridItem(.fixed(75)), count: 4)
+    
     @State private var selectedTheme: GameThemeOptions = .defaultTheme
     @State private var selectedPieces: [GamePiece] = []
     @State private var matchList: [GamePiece] = []
 
+    func checkWin() {
+        if matchList.count == selectedTheme.gameBoard.count {
+            gameData.isTimerRunning = false
+            gameData.score = gameData.time
+        }
+    }
+
     func handlePieceTap(selection: GamePiece) {
+        print("FOO")
+        // Start timer on first piece
+        if !gameData.isTimerRunning {
+            gameData.isTimerRunning = true
+        }
+
         // Prevent selecting same piece twice, matched piece, limit selection to 2
         if selectedPieces.contains(where: { $0.id == selection.id }) ||
             matchList.contains(where: { $0.id == selection.id }) ||
@@ -51,6 +68,8 @@ struct GameBoardView: View {
                 matchList.append(contentsOf: selectedPieces)
                 // Clear selectedPieces
                 selectedPieces.removeAll()
+                // Check win condition
+                checkWin()
             } else {
                 // Clear selection
                 func callback() {
@@ -66,6 +85,7 @@ struct GameBoardView: View {
 
     var body: some View {
         VStack {
+            ThemePickerView(selectedTheme: $selectedTheme)
             LazyHGrid(rows: rows, spacing: 10, content: {
                 ForEach(selectedTheme.gameBoard, id: \.id) { piece in
                     BoardItem(piece: piece, selectedPieces: $selectedPieces, matchList: $matchList)
@@ -74,11 +94,10 @@ struct GameBoardView: View {
                     }
                 }
             })
-            ThemePickerView(selectedTheme: $selectedTheme)
         }
     }
 }
 
 #Preview {
-    GameBoardView()
+    GameBoardView().environmentObject(GameData())
 }

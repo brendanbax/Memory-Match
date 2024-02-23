@@ -7,45 +7,45 @@
 
 import SwiftUI
 
+// Define GameData object for use in global app state
+class GameData: ObservableObject {
+    @Published var isTimerRunning = false
+    @Published var time = ""
+    @Published var score = ""
+}
+
 struct ContentView: View {
-    @State private var score: String = ""
-    @State private var activePiece: String = ""
-    @State private var isTimerRunning: Bool = false
-    @State private var timerString: String = "0.00"
+    @StateObject var gameData = GameData() // creates GameData object, puts in environment
 
-    func startGame() {
-        self.isTimerRunning.toggle()
-    }
-
-    func stopGame() {
-        self.score = self.timerString
-        self.isTimerRunning = false
-        print(self.timerString)
+    func resetGame() {
+        gameData.score = ""
+        gameData.time = ""
+        gameData.isTimerRunning = false
     }
 
     var body: some View {
         VStack {
             Spacer()
-            if self.isTimerRunning {
-                TimerView(isTimerRunning: $isTimerRunning, timerString: $timerString)
-            } else if self.score != "" {
+            if gameData.isTimerRunning {
+                TimerView()
+            } else if gameData.score != "" {
                 VStack {
                     Text("SCORE").font(Font.system(.title))
-                    Text(self.score).font(Font.system(.largeTitle, design: .monospaced))
+                    Text(gameData.score).font(Font.system(.largeTitle, design: .monospaced))
                 }
             }
             Spacer()
             GameBoardView()
             Spacer()
-            HStack {
-                Button("Start", systemImage: "play", action: startGame)
-                Button("Stop", systemImage: "stop", action: stopGame)
+            if gameData.score != "" {
+                Button("Play again", action: resetGame)
             }
             Spacer()
         }
+        .environmentObject(gameData)
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView().environmentObject(GameData())
 }
