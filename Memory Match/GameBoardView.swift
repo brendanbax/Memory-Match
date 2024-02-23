@@ -11,8 +11,7 @@ import Foundation
 struct BoardItem: View {
     let piece: GamePiece
 
-    @Binding var selectedPieces: [GamePiece]
-    @Binding var matchList: [GamePiece]
+    @EnvironmentObject var gameData: GameData
 
     var body: some View {
         ZStack {
@@ -24,7 +23,7 @@ struct BoardItem: View {
                 .font(.largeTitle)
                 .padding()
                 .cornerRadius(/*@START_MENU_TOKEN@*/8.0/*@END_MENU_TOKEN@*/)
-                .opacity(selectedPieces.contains(where: { $0.id == piece.id }) || matchList.contains(where: { $0.id == piece.id }) ? 1 : 0)
+                .opacity(gameData.selectedPieces.contains(where: { $0.id == piece.id }) || gameData.matchList.contains(where: { $0.id == piece.id }) ? 1 : 0)
         }
     }
 }
@@ -33,13 +32,11 @@ struct GameBoardView: View {
     @EnvironmentObject var gameData: GameData
     
     @State private var selectedTheme: GameThemeOptions = .defaultTheme
-    @State private var selectedPieces: [GamePiece] = []
-    @State private var matchList: [GamePiece] = []
 
     let rows = [GridItem](repeating: GridItem(.fixed(75)), count: 4)
 
     func checkWin() {
-        if matchList.count == selectedTheme.gameBoard.count {
+        if gameData.matchList.count == selectedTheme.gameBoard.count {
             gameData.isTimerRunning = false
             gameData.score = gameData.time
         }
@@ -52,27 +49,27 @@ struct GameBoardView: View {
         }
 
         // Prevent selecting same piece twice, matched piece, limit selection to 2
-        if selectedPieces.contains(where: { $0.id == selection.id }) ||
-            matchList.contains(where: { $0.id == selection.id }) ||
-            selectedPieces.count == 2 {
+        if gameData.selectedPieces.contains(where: { $0.id == selection.id }) ||
+            gameData.matchList.contains(where: { $0.id == selection.id }) ||
+            gameData.selectedPieces.count == 2 {
             return
         }
         // Append selection to array
-        selectedPieces.append(selection)
+        gameData.selectedPieces.append(selection)
 
-        if selectedPieces.count == 2 {
-            let isMatch = selectedPieces[0].symbol == selectedPieces[1].symbol
+        if gameData.selectedPieces.count == 2 {
+            let isMatch = gameData.selectedPieces[0].symbol == gameData.selectedPieces[1].symbol
             if isMatch {
                 // Move selectedPieces into matchList
-                matchList.append(contentsOf: selectedPieces)
+                gameData.matchList.append(contentsOf: gameData.selectedPieces)
                 // Clear selectedPieces
-                selectedPieces.removeAll()
+                gameData.selectedPieces.removeAll()
                 // Check win condition
                 checkWin()
             } else {
                 // Clear selection
                 func callback() {
-                    selectedPieces.removeAll()
+                    gameData.selectedPieces.removeAll()
                 }
                 // Delay so user can see revealed tile
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -87,7 +84,7 @@ struct GameBoardView: View {
             ThemePickerView(selectedTheme: $selectedTheme)
             LazyHGrid(rows: rows, spacing: 10, content: {
                 ForEach(selectedTheme.gameBoard, id: \.id) { piece in
-                    BoardItem(piece: piece, selectedPieces: $selectedPieces, matchList: $matchList)
+                    BoardItem(piece: piece)
                     .onTapGesture {
                         handlePieceTap(selection: piece)
                     }
