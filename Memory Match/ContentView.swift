@@ -32,14 +32,11 @@ struct ContentView: View {
                 VStack {
                     Text("SCORE").font(Font.system(.title))
                     Text(gameData.score).font(Font.system(.largeTitle, design: .monospaced))
+                    Button("Play again", action: resetGame)
                 }
             }
             Spacer()
             GameBoardView()
-            Spacer()
-            if gameData.score != "" {
-                Button("Play again", action: resetGame)
-            }
             Spacer()
         }
         .environmentObject(gameData)
