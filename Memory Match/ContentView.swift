@@ -12,8 +12,6 @@ class GameData: ObservableObject {
     @Published var isTimerRunning = false
     @Published var time = ""
     @Published var score = ""
-    @Published var selectedPieces: [GamePiece] = []
-    @Published var matchList: [GamePiece] = []
 }
 
 struct ContentView: View {

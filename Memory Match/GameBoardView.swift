@@ -8,35 +8,17 @@
 import SwiftUI
 import Foundation
 
-struct BoardItem: View {
-    let piece: GamePiece
-
-    @EnvironmentObject var gameData: GameData
-
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 20)
-                .fill(.white)
-                .stroke(.blue, lineWidth: 3)
-                .aspectRatio(contentMode: .fit)
-            Text(piece.symbol)
-                .font(.largeTitle)
-                .padding()
-                .cornerRadius(/*@START_MENU_TOKEN@*/8.0/*@END_MENU_TOKEN@*/)
-                .opacity(gameData.selectedPieces.contains(where: { $0.id == piece.id }) || gameData.matchList.contains(where: { $0.id == piece.id }) ? 1 : 0)
-        }
-    }
-}
-
 struct GameBoardView: View {
     @EnvironmentObject var gameData: GameData
     
     @State private var selectedTheme: GameThemeOptions = .defaultTheme
+    @State private var matchList: [GamePiece] = []
+    @State private var selectedPieces: [GamePiece] = []
 
     let rows = [GridItem](repeating: GridItem(.fixed(75)), count: 4)
 
     func checkWin() {
-        if gameData.matchList.count == selectedTheme.gameBoard.count {
+        if matchList.count == selectedTheme.gameBoard.count {
             gameData.isTimerRunning = false
             gameData.score = gameData.time
         }
@@ -49,27 +31,27 @@ struct GameBoardView: View {
         }
 
         // Prevent selecting same piece twice, matched piece, limit selection to 2
-        if gameData.selectedPieces.contains(where: { $0.id == selection.id }) ||
-            gameData.matchList.contains(where: { $0.id == selection.id }) ||
-            gameData.selectedPieces.count == 2 {
+        if selectedPieces.contains(where: { $0.id == selection.id }) ||
+            matchList.contains(where: { $0.id == selection.id }) ||
+            selectedPieces.count == 2 {
             return
         }
         // Append selection to array
-        gameData.selectedPieces.append(selection)
+        selectedPieces.append(selection)
 
-        if gameData.selectedPieces.count == 2 {
-            let isMatch = gameData.selectedPieces[0].symbol == gameData.selectedPieces[1].symbol
+        if selectedPieces.count == 2 {
+            let isMatch = selectedPieces[0].symbol == selectedPieces[1].symbol
             if isMatch {
                 // Move selectedPieces into matchList
-                gameData.matchList.append(contentsOf: gameData.selectedPieces)
+                matchList.append(contentsOf: selectedPieces)
                 // Clear selectedPieces
-                gameData.selectedPieces.removeAll()
+                selectedPieces.removeAll()
                 // Check win condition
                 checkWin()
             } else {
                 // Clear selection
                 func callback() {
-                    gameData.selectedPieces.removeAll()
+                    selectedPieces.removeAll()
                 }
                 // Delay so user can see revealed tile
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -84,7 +66,17 @@ struct GameBoardView: View {
             ThemePickerView(selectedTheme: $selectedTheme)
             LazyHGrid(rows: rows, spacing: 10, content: {
                 ForEach(selectedTheme.gameBoard, id: \.id) { piece in
-                    BoardItem(piece: piece)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(.white)
+                            .stroke(.blue, lineWidth: 3)
+                            .aspectRatio(contentMode: .fit)
+                        Text(piece.symbol)
+                            .font(.largeTitle)
+                            .padding()
+                            .cornerRadius(/*@START_MENU_TOKEN@*/8.0/*@END_MENU_TOKEN@*/)
+                            .opacity(selectedPieces.contains(where: { $0.id == piece.id }) || matchList.contains(where: { $0.id == piece.id }) ? 1 : 0)
+                    }
                     .onTapGesture {
                         handlePieceTap(selection: piece)
                     }
