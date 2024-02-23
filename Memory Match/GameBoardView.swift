@@ -10,7 +10,7 @@ import Foundation
 
 struct BoardItem: View {
     let piece: GamePiece
-    
+
     @Binding var selectedPieces: [GamePiece]
     @Binding var matchList: [GamePiece]
 
@@ -32,11 +32,11 @@ struct BoardItem: View {
 struct GameBoardView: View {
     @EnvironmentObject var gameData: GameData
     
-    let rows = [GridItem](repeating: GridItem(.fixed(75)), count: 4)
-    
     @State private var selectedTheme: GameThemeOptions = .defaultTheme
     @State private var selectedPieces: [GamePiece] = []
     @State private var matchList: [GamePiece] = []
+
+    let rows = [GridItem](repeating: GridItem(.fixed(75)), count: 4)
 
     func checkWin() {
         if matchList.count == selectedTheme.gameBoard.count {
@@ -46,7 +46,6 @@ struct GameBoardView: View {
     }
 
     func handlePieceTap(selection: GamePiece) {
-        print("FOO")
         // Start timer on first piece
         if !gameData.isTimerRunning {
             gameData.isTimerRunning = true
